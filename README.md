@@ -1,2 +1,2 @@
 # rawr
-a simple RAW image reader in Python
+A lightweight RAW reader in Python
