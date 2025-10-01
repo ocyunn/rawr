@@ -32,7 +32,7 @@ class rawImageClass():
 
         # Color
         self.bayerPattern = bayer
-        self.ccMatrix = rawDict.rgb_xyz_matrix[0:-1,:] #rawDict.color_matrix[0:3,0:3]
+        self.ccMatrix = rawDict.rgb_xyz_matrix[0:-1,:]
         self.whiteBalance = rawDict.camera_whitebalance[:-1]
 
         # Tone
@@ -60,7 +60,7 @@ for c in range(3):
     rawRGBdb[..., c] *= wb[c]
 rawRGBdb = np.clip(rawRGBdb, 0, 1)
 
-#%%
+#%% Device RGB to Linear sRGB
 XYZ_to_cam = rawImage.ccMatrix
 sRGB_to_XYZ = np.array([[0.4124564, 0.3575761, 0.1804375],
                         [0.2126729, 0.7151522, 0.0721750],
@@ -70,7 +70,6 @@ norm = np.tile(np.sum(sRGB_to_cam, 1), (3, 1)).transpose()
 sRGB_to_cam = sRGB_to_cam / norm
 cam_to_sRGB = np.linalg.inv(sRGB_to_cam)
 linearRGB = np.einsum('ij,...j', cam_to_sRGB, rawRGBdb)  # performs the matrix-vector product for each pixel
-
 
 image_sRGB = linearRGB.copy()
 i = linearRGB < 0.0031308
