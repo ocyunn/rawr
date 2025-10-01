@@ -1,2 +1,2 @@
 # rawr
-A lightweight RAW reader in Python
+A lightweight DNG reader in Python
